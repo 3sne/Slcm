@@ -1,3 +1,7 @@
+package com.example.asus.slcm;
+
+import android.util.Log;
+
 public class Subject {
 
     private String mAcadYear;
@@ -10,14 +14,18 @@ public class Subject {
     private String mSubjectCode;
 
     public Subject(String mAcadYear, String mAttendancePercentage, String mDaysAbsent, String mDaysPresent, String mTotalClasses, String mSemester, String mSubjectName, String mSubjectCode) {
-        this.mAcadYear = mAcadYear;
-        this.mAttendancePercentage = mAttendancePercentage;
-        this.mDaysAbsent = mDaysAbsent;
-        this.mDaysPresent = mDaysPresent;
-        this.mTotalClasses = mTotalClasses;
-        this.mSemester = mSemester;
-        this.mSubjectName = mSubjectName;
-        this.mSubjectCode = mSubjectCode;
+        try {
+            this.mAcadYear = mAcadYear;
+            this.mAttendancePercentage = mAttendancePercentage;
+            this.mDaysAbsent = mDaysAbsent;
+            this.mDaysPresent = mDaysPresent;
+            this.mTotalClasses = mTotalClasses;
+            this.mSemester = mSemester;
+            this.mSubjectName = mSubjectName;
+            this.mSubjectCode = mSubjectCode;
+        } catch (Exception e) {
+            Log.e("Subject Constructor", "Something went wrong: " + e.toString());
+        }
     }
 
     public String getmAcadYear() {

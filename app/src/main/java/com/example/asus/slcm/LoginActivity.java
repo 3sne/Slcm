@@ -72,27 +72,30 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            if (response.getString("code").equals("666")) { //Successful login
+                                // make user profile that collects all subjects
+                                User currentUser = new User(mUsername, mPassword);
 
-                            if (response.getString("code") == "666" ) {
-                                //Successful login
+                                // parse subject data
                                 JSONArray subjectArray = response.getJSONArray("data");
-
                                 for (int i = 0; i < subjectArray.length(); i++) {
                                     JSONObject subjectObject = subjectArray.getJSONObject(i);
-                                    Subject sub = new Subject(subjectObject.getString("Academic Year"),
-                                                                subjectObject.getString("Attendance(%)"),
-                                                                subjectObject.getString("Days Absent"),
-                                                                subjectObject.getString("Days Present"),
-                                                                subjectObject.getString("Total Class"),
-                                                                subjectObject.getString("Semester"),
-                                                                subjectObject.getString("Subject "),
-                                                                subjectObject.getString("Subject Code"));
+                                    String a = subjectObject.getString("Attendance(%)");
+                                    String b = subjectObject.getString("Days Absent");
+                                    String c = subjectObject.getString("Academic Year");
+                                    String d = subjectObject.getString("Days Present");
+                                    String e = subjectObject.getString("Total Class");
+                                    String f = subjectObject.getString("Semester");
+                                    String g = subjectObject.getString("Subject ");
+                                    String h = subjectObject.getString("Subject Code");
+                                    Subject sub = new Subject(a, b, c, d, e, f, g, h);
+                                    currentUser.addSubject(sub);
                                 }
-
-
+                                currentUser.printUserInfoToConsole();
+                                Toast.makeText(LoginActivity.this,"SUCCESS!\nCODE: 666",Toast.LENGTH_LONG).show();
                             } else {
                                 //erroneous login
-
+                                Toast.makeText(LoginActivity.this,"ERROR :(\nCODE: " + response.getString("code"),Toast.LENGTH_LONG).show();
                             }
 
                         } catch (JSONException e) {
