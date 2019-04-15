@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -54,12 +55,6 @@ public class LoginActivity extends AppCompatActivity {
                     mUsername = user;
                     mPassword = pass;
 
-                    
-
-                    
-                    Toast.makeText(LoginActivity.this,"Henlo ",Toast.LENGTH_LONG).show();
-
-
                     Toast.makeText(LoginActivity.this,"Henlo ",Toast.LENGTH_LONG).show();
                     jsonParse();
                 }
@@ -71,20 +66,37 @@ public class LoginActivity extends AppCompatActivity {
 
     private void jsonParse() {
         String url = "http://13.234.66.100/go?username=" + mUsername + "&password=" + mPassword;
-        final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
                         try {
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject mainSubject = response.getJSONObject(i);
 
-                                String attendancePercentage = mainSubject.getString("Attendance(%)");
-                                String subjectName = mainSubject.getString("Subject ");
+                            if (response.getString("code") == "666" ) {
+                                //Successful login
+                                JSONArray subjectArray = response.getJSONArray("data");
 
-                                Log.d("BOY", subjectName + " " + attendancePercentage);
+                                for (int i = 0; i < subjectArray.length(); i++) {
+                                    JSONObject subjectObject = subjectArray.getJSONObject(i);
+                                    Subject sub = new Subject(subjectObject.getString("Academic Year"),
+                                                                subjectObject.getString("Attendance(%)"),
+                                                                subjectObject.getString("Days Absent"),
+                                                                subjectObject.getString("Days Present"),
+                                                                subjectObject.getString("Total Class"),
+                                                                subjectObject.getString("Semester"),
+                                                                subjectObject.getString("Subject "),
+                                                                subjectObject.getString("Subject Code"));
+                                }
+
+
+                            } else {
+                                //erroneous login
+
                             }
+
                         } catch (JSONException e) {
+                            Log.e("JSON ERROR", e.toString());
                             e.printStackTrace();
                         }
                     }
