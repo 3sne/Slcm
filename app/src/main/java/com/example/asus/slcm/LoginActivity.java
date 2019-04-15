@@ -1,5 +1,6 @@
 package com.example.asus.slcm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private RequestQueue mQueue;
     private String mUsername;
     private String mPassword;
+    public User ourBoi = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +56,17 @@ public class LoginActivity extends AppCompatActivity {
 
                     mUsername = user;
                     mPassword = pass;
-
-                    Toast.makeText(LoginActivity.this,"Henlo ",Toast.LENGTH_LONG).show();
+                    ourBoi.setmRegistrationNumber(mUsername);
+                    ourBoi.setmRawPassword(mPassword);
+                    Toast.makeText(LoginActivity.this,"YAY",Toast.LENGTH_LONG).show();
                     jsonParse();
+                    Intent i = new Intent(view.getContext(), StageActivity.class);
+                    i.putExtra("current_user", ourBoi);
+                    startActivity(i);
+
+                } else {
+                    Toast.makeText(LoginActivity.this, "Please enter username or password", Toast.LENGTH_LONG).show();
                 }
-                else
-                    Toast.makeText(LoginActivity.this,"Please enter username or password",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -72,27 +79,27 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-
-                            if (response.getString("code") == "666" ) {
-                                //Successful login
+                            if (response.getString("code").equals("666")) { //Successful login
+                                // parse subject data
                                 JSONArray subjectArray = response.getJSONArray("data");
-
                                 for (int i = 0; i < subjectArray.length(); i++) {
                                     JSONObject subjectObject = subjectArray.getJSONObject(i);
-                                    Subject sub = new Subject(subjectObject.getString("Academic Year"),
-                                                                subjectObject.getString("Attendance(%)"),
-                                                                subjectObject.getString("Days Absent"),
-                                                                subjectObject.getString("Days Present"),
-                                                                subjectObject.getString("Total Class"),
-                                                                subjectObject.getString("Semester"),
-                                                                subjectObject.getString("Subject "),
-                                                                subjectObject.getString("Subject Code"));
+                                    String a = subjectObject.getString("Attendance(%)");
+                                    String b = subjectObject.getString("Days Absent");
+                                    String c = subjectObject.getString("Academic Year");
+                                    String d = subjectObject.getString("Days Present");
+                                    String e = subjectObject.getString("Total Class");
+                                    String f = subjectObject.getString("Semester");
+                                    String g = subjectObject.getString("Subject ");
+                                    String h = subjectObject.getString("Subject Code");
+                                    Subject sub = new Subject(a, b, c, d, e, f, g, h);
+                                    ourBoi.addSubject(sub);
                                 }
-
-
+                                ourBoi.printUserInfoToConsole();
+                                Toast.makeText(LoginActivity.this,"SUCCESS!\nCODE: 666",Toast.LENGTH_LONG).show();
                             } else {
                                 //erroneous login
-
+                                Toast.makeText(LoginActivity.this,"ERROR :(\nCODE: " + response.getString("code"),Toast.LENGTH_LONG).show();
                             }
 
                         } catch (JSONException e) {
@@ -106,7 +113,6 @@ public class LoginActivity extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
-
         mQueue.add(request);
     }
 
