@@ -49,8 +49,12 @@ public class LoginActivity extends AppCompatActivity {
                 if ( !(TextUtils.isEmpty(user)) && !(TextUtils.isEmpty(pass)) ){
 
                     /*write the code for login that is your http request*/
+<<<<<<< HEAD
                     mUsername = user;
                     mPassword = pass;
+=======
+                    
+>>>>>>> parent of e840497... Update LoginActivity.java
                     Toast.makeText(LoginActivity.this,"Henlo ",Toast.LENGTH_LONG).show();
                     jsonParse();
                 }
