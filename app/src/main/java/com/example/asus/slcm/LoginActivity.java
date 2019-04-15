@@ -1,5 +1,6 @@
 package com.example.asus.slcm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private RequestQueue mQueue;
     private String mUsername;
     private String mPassword;
+    public User ourBoi = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +56,17 @@ public class LoginActivity extends AppCompatActivity {
 
                     mUsername = user;
                     mPassword = pass;
-
-                    Toast.makeText(LoginActivity.this,"Henlo ",Toast.LENGTH_LONG).show();
+                    ourBoi.setmRegistrationNumber(mUsername);
+                    ourBoi.setmRawPassword(mPassword);
+                    Toast.makeText(LoginActivity.this,"YAY",Toast.LENGTH_LONG).show();
                     jsonParse();
+                    Intent i = new Intent(view.getContext(), StageActivity.class);
+                    i.putExtra("current_user", ourBoi);
+                    startActivity(i);
+
+                } else {
+                    Toast.makeText(LoginActivity.this, "Please enter username or password", Toast.LENGTH_LONG).show();
                 }
-                else
-                    Toast.makeText(LoginActivity.this,"Please enter username or password",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -73,9 +80,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             if (response.getString("code").equals("666")) { //Successful login
-                                // make user profile that collects all subjects
-                                User currentUser = new User(mUsername, mPassword);
-
                                 // parse subject data
                                 JSONArray subjectArray = response.getJSONArray("data");
                                 for (int i = 0; i < subjectArray.length(); i++) {
@@ -89,9 +93,9 @@ public class LoginActivity extends AppCompatActivity {
                                     String g = subjectObject.getString("Subject ");
                                     String h = subjectObject.getString("Subject Code");
                                     Subject sub = new Subject(a, b, c, d, e, f, g, h);
-                                    currentUser.addSubject(sub);
+                                    ourBoi.addSubject(sub);
                                 }
-                                currentUser.printUserInfoToConsole();
+                                ourBoi.printUserInfoToConsole();
                                 Toast.makeText(LoginActivity.this,"SUCCESS!\nCODE: 666",Toast.LENGTH_LONG).show();
                             } else {
                                 //erroneous login
@@ -109,7 +113,6 @@ public class LoginActivity extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
-
         mQueue.add(request);
     }
 

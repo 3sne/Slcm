@@ -1,24 +1,32 @@
 package com.example.asus.slcm;
 
 import android.util.Log;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable {
 
     public ArrayList<Subject> subjectList;
     private String mRegistrationNumber;
     private String mRawPassword;
+    private boolean areSubjectsLoaded;
+
+    public User() {
+        subjectList = new ArrayList<>();
+    }
 
     public User(String mRegistrationNumber, String mRawPassword) {
         this.mRegistrationNumber = mRegistrationNumber;
         this.mRawPassword = mRawPassword;
         subjectList = new ArrayList<>();
+        this.areSubjectsLoaded = false;
     }
 
     public void addSubject(Subject sub) {
         try {
             if (!subjectList.contains(sub)) { //maintain uniqueness
                 subjectList.add(sub);
+                areSubjectsLoaded = true;
             }
         } catch (Exception e) {
             Log.e("updateSubjectList", "Something went wrong: " + e.toString() + e.getClass());
@@ -37,6 +45,14 @@ public class User {
         }
     }
 
+    public void setmRegistrationNumber(String mRegistrationNumber) {
+        this.mRegistrationNumber = mRegistrationNumber;
+    }
+
+    public void setmRawPassword(String mRawPassword) {
+        this.mRawPassword = mRawPassword;
+    }
+
     public String getmRegistrationNumber() {
         return mRegistrationNumber;
     }
@@ -45,4 +61,7 @@ public class User {
         return mRawPassword;
     }
 
+    public boolean getAreSubjectsLoaded() {
+        return  areSubjectsLoaded;
+    }
 }
