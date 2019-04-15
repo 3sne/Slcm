@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -54,6 +55,10 @@ public class LoginActivity extends AppCompatActivity {
                     mPassword = pass;
 
                     
+
+                    
+                    Toast.makeText(LoginActivity.this,"Henlo ",Toast.LENGTH_LONG).show();
+
 
                     Toast.makeText(LoginActivity.this,"Henlo ",Toast.LENGTH_LONG).show();
                     jsonParse();
