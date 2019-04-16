@@ -2,6 +2,7 @@ package com.example.asus.slcm;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +42,9 @@ public class SubjectRecyclerAdapter extends RecyclerView.Adapter<SubjectRecycler
     @Override
     public void onBindViewHolder(final SubjectViewHolder holder, int position) {
         Subject subject = mSubjectList.get(position);
+        Log.d("HERE", "What up boioiiiii" + position);
         holder.subjectName.setText(subject.getmSubjectName());
-        holder.atdPer.setText(subject.getmAttendancePercentage() + " %");
+        holder.atdPer.setText(subject.getmAttendancePercentage() + "%");
         holder.presentClasses.setText(subject.getmDaysPresent());
         holder.bunkedClasses.setText(subject.getmDaysAbsent());
         holder.totalClasses.setText(subject.getmTotalClasses());

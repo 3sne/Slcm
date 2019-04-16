@@ -1,13 +1,16 @@
 package com.example.asus.slcm;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -31,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private String mUsername;
     private String mPassword;
     public User ourBoi = new User();
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         password=findViewById(R.id.password);
         loginButton=findViewById(R.id.loginButton);
         mQueue = Volley.newRequestQueue(this);
+        mContext = getApplicationContext();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,12 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                     mPassword = pass;
                     ourBoi.setmRegistrationNumber(mUsername);
                     ourBoi.setmRawPassword(mPassword);
-                    Toast.makeText(LoginActivity.this,"YAY",Toast.LENGTH_LONG).show();
                     jsonParse();
-                    Intent i = new Intent(view.getContext(), StageActivity.class);
-                    i.putExtra("current_user", ourBoi);
-                    startActivity(i);
-
                 } else {
                     Toast.makeText(LoginActivity.this, "Please enter username or password", Toast.LENGTH_LONG).show();
                 }
@@ -73,6 +73,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void jsonParse() {
         String url = "http://13.234.66.100/go?username=" + mUsername + "&password=" + mPassword;
+
+        final LinearLayout linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
+        CardView cv = (CardView) findViewById(R.id.card_view_login);
+        cv.setVisibility(View.GONE);
+        linlaHeaderProgress.setVisibility(View.VISIBLE);
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -84,9 +89,9 @@ public class LoginActivity extends AppCompatActivity {
                                 JSONArray subjectArray = response.getJSONArray("data");
                                 for (int i = 0; i < subjectArray.length(); i++) {
                                     JSONObject subjectObject = subjectArray.getJSONObject(i);
-                                    String a = subjectObject.getString("Attendance(%)");
-                                    String b = subjectObject.getString("Days Absent");
-                                    String c = subjectObject.getString("Academic Year");
+                                    String a = subjectObject.getString("Academic Year");
+                                    String b = subjectObject.getString("Attendance(%)");
+                                    String c = subjectObject.getString("Days Absent");
                                     String d = subjectObject.getString("Days Present");
                                     String e = subjectObject.getString("Total Class");
                                     String f = subjectObject.getString("Semester");
@@ -96,7 +101,9 @@ public class LoginActivity extends AppCompatActivity {
                                     ourBoi.addSubject(sub);
                                 }
                                 ourBoi.printUserInfoToConsole();
-                                Toast.makeText(LoginActivity.this,"SUCCESS!\nCODE: 666",Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(mContext, StageActivity.class);
+                                i.putExtra("current_user", ourBoi);
+                                startActivity(i);
                             } else {
                                 //erroneous login
                                 Toast.makeText(LoginActivity.this,"ERROR :(\nCODE: " + response.getString("code"),Toast.LENGTH_LONG).show();
@@ -105,8 +112,11 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             Log.e("JSON ERROR", e.toString());
                             e.printStackTrace();
+                        } finally {
+                            linlaHeaderProgress.setVisibility(View.GONE);
                         }
                     }
+
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {

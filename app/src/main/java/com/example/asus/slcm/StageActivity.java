@@ -23,8 +23,6 @@ import java.util.List;
 
 public class StageActivity extends AppCompatActivity {
 
-    RelativeLayout relativeLayout;
-    Context context;
     private RecyclerView recyclerView;
     private SubjectRecyclerAdapter srAdapter;
     private List<Subject> subjectList;
@@ -34,21 +32,18 @@ public class StageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stage);
 
-        context = getApplicationContext();
-        relativeLayout = (RelativeLayout)findViewById(R.id.relativelayout1);
-
         Intent i = getIntent();
         User ourBoi = (User) i.getSerializableExtra("current_user");
         Log.d("BOI", ourBoi.getmRawPassword());
-        if (ourBoi.getAreSubjectsLoaded()) {
+        ourBoi.printUserInfoToConsole();
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
-//            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-//            recyclerView.setLayoutManager(mLayoutManager);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+            recyclerView.setLayoutManager(mLayoutManager);
 //            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-//            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(srAdapter);
-        }
+            srAdapter.notifyDataSetChanged();
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
