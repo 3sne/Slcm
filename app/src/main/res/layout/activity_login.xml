@@ -7,6 +7,17 @@
     android:animationCache="true"
     tools:context=".LoginActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bunks Prototype"
+        android:layout_centerHorizontal="true"
+        android:textSize="32dp"
+        android:textColor="@android:color/black"
+        android:layout_above="@+id/card_view_login"
+        android:typeface="monospace"
+        />
+
     <android.support.v7.widget.CardView
         android:id="@+id/card_view_login"
         android:layout_width="match_parent"
@@ -16,6 +27,7 @@
         android:layout_margin="50dp"
         android:elevation="5dp"
         app:cardCornerRadius="20dp">
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -32,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:gravity="center_horizontal"
-                android:hint="Enter User Name"
+                android:hint="Registration Number"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -42,7 +54,7 @@
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:gravity="center_horizontal"
-                android:hint="Enter password"
+                android:hint="Password"
                 android:inputType="textPassword" />
 
             <Button
