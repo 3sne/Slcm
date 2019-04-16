@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         String url = "http://13.234.66.100/go?username=" + mUsername + "&password=" + mPassword;
 
         final LinearLayout linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
-        CardView cv = (CardView) findViewById(R.id.card_view_login);
+        final CardView cv = (CardView) findViewById(R.id.card_view_login);
         cv.setVisibility(View.GONE);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
 
@@ -100,7 +100,8 @@ public class LoginActivity extends AppCompatActivity {
                                     Subject sub = new Subject(a, b, c, d, e, f, g, h);
                                     ourBoi.addSubject(sub);
                                 }
-                                ourBoi.printUserInfoToConsole();
+                                cv.setVisibility(View.VISIBLE);
+                                linlaHeaderProgress.setVisibility(View.GONE);
                                 Intent i = new Intent(mContext, StageActivity.class);
                                 i.putExtra("current_user", ourBoi);
                                 startActivity(i);
