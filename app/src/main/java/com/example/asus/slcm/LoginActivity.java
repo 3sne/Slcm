@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -75,7 +77,12 @@ public class LoginActivity extends AppCompatActivity {
                          mPassword = pass;
                          ourBoi.setmRegistrationNumber(mUsername);
                          ourBoi.setmRawPassword(mPassword);
-                         jsonParse();
+                         if (isNetworkAvailable()) {
+                             jsonParse();
+                         } else {
+                             Log.i("offline", "Not connect to internet");
+                             Toast.makeText(LoginActivity.this, "Check your internet connection :)", Toast.LENGTH_LONG).show();
+                         }
                      } else {
                          Log.i("verify", "UN ____  SUCCC");
                          Toast.makeText(LoginActivity.this, "Invalid Registration Number", Toast.LENGTH_LONG).show();
@@ -176,6 +183,13 @@ public class LoginActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

@@ -36,15 +36,14 @@ public class StageActivity extends AppCompatActivity {
         Intent i = getIntent();
         User ourBoi = (User) i.getSerializableExtra("current_user");
         Log.d("BOI", ourBoi.getmRawPassword());
-        ourBoi.printUserInfoToConsole();
-            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-            srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
-            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-            recyclerView.setLayoutManager(mLayoutManager);
-//            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(srAdapter);
-            srAdapter.notifyDataSetChanged();
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+        recyclerView.setLayoutManager(mLayoutManager);
+//      recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(srAdapter);
+
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
