@@ -15,6 +15,7 @@
         <RelativeLayout
         android:layout_width="match_parent"
             android:padding="5dp"
+            android:background="@drawable/custom_bg_gradient_card"
             android:layout_height="match_parent">
 
             <RelativeLayout
