@@ -38,7 +38,7 @@ public class User implements Serializable {
             Log.i("USER", "RegNo >> " + mRegistrationNumber + "\nPassword >> " + mRawPassword);
             for (int i = 0; i < subjectList.size(); i++) {
                 Subject s = subjectList.get(i);
-                Log.i("ATTENDANCE", "AY: " + s.getmAcadYear() + "\nATD: " + s.getmAttendancePercentage() + "\nDA: " + s.getmDaysAbsent() + "\nDP" + s.getmDaysPresent() + "\nTC: " + s.getmTotalClasses() + "\nSEM: " + s.getmSemester() + "\nSUB: " + s.getmSubjectName() + "\nSC: " + s.getmSubjectCode());
+                Log.i("ATTENDANCE", "AY: " + s.getmAcadYear() + " | ATD: " + s.getmAttendancePercentage() + " | " + s.getmDaysAbsent() + " + " + s.getmDaysPresent() + " = " + s.getmTotalClasses() + " |  " + s.getmSemester() + " | " + s.getmSubjectName() + " | " + s.getmSubjectCode());
             }
         } catch (Exception e) {
             Log.e("printInfo", "Something went wrong: " + e.toString() + e.getClass());

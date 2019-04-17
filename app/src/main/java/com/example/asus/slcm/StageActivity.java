@@ -11,6 +11,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -23,8 +24,6 @@ import java.util.List;
 
 public class StageActivity extends AppCompatActivity {
 
-    RelativeLayout relativeLayout;
-    Context context;
     private RecyclerView recyclerView;
     private SubjectRecyclerAdapter srAdapter;
     private List<Subject> subjectList;
@@ -34,21 +33,18 @@ public class StageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stage);
 
-        context = getApplicationContext();
-        relativeLayout = (RelativeLayout)findViewById(R.id.relativelayout1);
-
         Intent i = getIntent();
         User ourBoi = (User) i.getSerializableExtra("current_user");
         Log.d("BOI", ourBoi.getmRawPassword());
-        if (ourBoi.getAreSubjectsLoaded()) {
+        ourBoi.printUserInfoToConsole();
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
-//            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-//            recyclerView.setLayoutManager(mLayoutManager);
-//            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-//            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(srAdapter);
-        }
+            srAdapter.notifyDataSetChanged();
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

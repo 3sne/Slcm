@@ -2,7 +2,9 @@ package com.example.asus.slcm;
 
 import android.util.Log;
 
-public class Subject {
+import java.io.Serializable;
+
+public class Subject implements Serializable {
 
     private String mAcadYear;
     private String mAttendancePercentage;
