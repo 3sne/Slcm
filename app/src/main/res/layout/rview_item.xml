@@ -34,15 +34,15 @@
                     android:layout_height="wrap_content"
                     android:text="Subject Name"
                     android:id="@+id/subjectName"
-                    android:textSize="24dp"
+                    android:textSize="18dp"
                     android:textStyle="bold"
                     android:textAllCaps="true"
-                    android:layout_weight="4"
+                    android:layout_weight="3"
                     />
                 <TextView
                     android:layout_width="0dp"
                     android:text="75%"
-                    android:textSize="24dp"
+                    android:textSize="20dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/atdPer"
                     android:layout_weight="1"
@@ -65,6 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="36"
+                        android:textSize="18dp"
                         android:id="@+id/totalClasses"
                         android:layout_width="0dp"/>
                 </LinearLayout>
@@ -86,6 +87,7 @@
                         android:layout_weight="1"
                         android:id="@+id/presentClasses"
                         android:text="27"
+                        android:textSize="18dp"
                         android:layout_width="0dp"/>
                 </LinearLayout>
                 <LinearLayout
@@ -106,6 +108,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="9"
+                        android:textSize="18dp"
                         android:id="@+id/bunkedClasses"
                         android:layout_width="0dp"/>
                 </LinearLayout>
