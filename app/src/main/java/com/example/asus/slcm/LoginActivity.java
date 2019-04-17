@@ -62,6 +62,23 @@ public class LoginActivity extends AppCompatActivity {
         cv = (CardView) findViewById(R.id.card_view_login);
         appTitle = (TextView) findViewById(R.id.app_title);
 
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String un = sharedPref.getString("tentative_username", "bobo");
+        String ps = sharedPref.getString("tentative_password", "vogo");
+
+        if (!un.equals("bobo") || !ps.equals("vogo")) {
+            mUsername = un;
+            mPassword = ps;
+            ourBoi.setmRegistrationNumber(mUsername);
+            ourBoi.setmRawPassword(mPassword);
+            if (isNetworkAvailable()) {
+                jsonParse();
+            } else {
+                Log.i("offline", "Not connect to internet");
+                Toast.makeText(LoginActivity.this, "Check your internet connection :)", Toast.LENGTH_LONG).show();
+            }
+        }
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,7 +141,6 @@ public class LoginActivity extends AppCompatActivity {
                                         ourBoi.addSubject(sub);
                                     }
                                     if (ourBoi.getAreSubjectsLoaded()) {
-                                        Toast.makeText(LoginActivity.this, "Success :)", Toast.LENGTH_LONG).show();
                                         SharedPreferences sharedPref = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedPref.edit();
                                         editor.putString("tentative_username", userName.getText().toString().trim());

@@ -6,13 +6,43 @@
     tools:context=".StageActivity"
     android:id="@+id/relativelayout1" >
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_container">
+
+        <TextView
+            android:id="@+id/regNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="4"
+            android:layout_gravity="center_vertical"
+            android:text="Hi, 160905032"
+            android:textSize="28dp" />
+
+        <Button
+            android:id="@+id/logoutButton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:elevation="20dp"
+            android:layout_weight="1"
+            android:text="Logout" />
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/ll_container"
         android:id="@+id/recycler_view"
         android:nestedScrollingEnabled="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:animateLayoutChanges="true"
         android:scrollbars="vertical" />
 
 </RelativeLayout>

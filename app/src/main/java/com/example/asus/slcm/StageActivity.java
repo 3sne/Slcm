@@ -1,7 +1,9 @@
 package com.example.asus.slcm;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +30,8 @@ public class StageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SubjectRecyclerAdapter srAdapter;
     private List<Subject> subjectList;
+    private TextView registrationNumberTextView;
+    private Button logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +39,7 @@ public class StageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stage);
 
         Intent i = getIntent();
-        User ourBoi = (User) i.getSerializableExtra("current_user");
+        final User ourBoi = (User) i.getSerializableExtra("current_user");
         Log.d("BOI", ourBoi.getmRawPassword());
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
@@ -43,6 +48,23 @@ public class StageActivity extends AppCompatActivity {
 //      recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(srAdapter);
+
+        registrationNumberTextView = (TextView) findViewById(R.id.regNo);
+        registrationNumberTextView.setText(ourBoi.getmRegistrationNumber());
+
+        logoutButton = (Button) findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPref = StageActivity.this.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor spEditor = sharedPref.edit();
+                spEditor.remove("tentative_username");
+                spEditor.remove("tentative_password");
+                ourBoi.subjectList.clear();
+                srAdapter.notifyDataSetChanged();
+                StageActivity.this.finish();
+            }
+        });
 
     }
 

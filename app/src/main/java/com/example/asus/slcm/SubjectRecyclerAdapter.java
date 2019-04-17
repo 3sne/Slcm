@@ -2,11 +2,13 @@ package com.example.asus.slcm;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class SubjectRecyclerAdapter extends RecyclerView.Adapter<SubjectRecycler
     }
 
     @Override
-    public void onBindViewHolder(final SubjectViewHolder holder, int position) {
+    public void onBindViewHolder(final SubjectViewHolder holder, final int position) {
         Subject subject = mSubjectList.get(position);
         Log.d("HERE", "What up boioiiiii" + position);
         holder.subjectName.setText(subject.getmSubjectName());
