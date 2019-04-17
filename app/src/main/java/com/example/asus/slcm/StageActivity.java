@@ -41,7 +41,7 @@ public class StageActivity extends AppCompatActivity {
             srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
             recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+//            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(srAdapter);
             srAdapter.notifyDataSetChanged();

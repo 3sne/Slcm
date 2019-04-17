@@ -1,5 +1,6 @@
 package com.example.asus.slcm;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -61,6 +63,9 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                userName.clearFocus();
+                password.clearFocus();
+                loginButton.requestFocus();
                  String user=userName.getText().toString().trim();
                  String pass=password.getText().toString().trim();
                  if (!(TextUtils.isEmpty(user)) && !(TextUtils.isEmpty(pass))) {
@@ -86,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         String url = "http://13.234.66.100/go?username=" + mUsername + "&password=" + mPassword;
 
         progressBarStart();
+        hideKeyboard(LoginActivity.this);
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -133,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             Log.e("JSON ERROR", e.toString());
+                            Toast.makeText(LoginActivity.this,"Timed Out, please try again ^.^",Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                         }
                     }
@@ -161,6 +168,14 @@ public class LoginActivity extends AppCompatActivity {
 
     public boolean verifyUserName(String user) {
         return user.matches("[12][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]");
+    }
+
+    public void hideKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
