@@ -44,7 +44,6 @@ public class SubjectRecyclerAdapter extends RecyclerView.Adapter<SubjectRecycler
     @Override
     public void onBindViewHolder(final SubjectViewHolder holder, final int position) {
         Subject subject = mSubjectList.get(position);
-        Log.d("HERE", "What up boioiiiii" + position);
         holder.subjectName.setText(subject.getmSubjectName());
         holder.atdPer.setText(subject.getmAttendancePercentage() + "%");
         holder.presentClasses.setText(subject.getmDaysPresent());

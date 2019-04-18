@@ -209,8 +209,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        ourBoi.subjectList.clear();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         progressBarEnd();
     }
+
 }

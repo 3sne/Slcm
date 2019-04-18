@@ -40,71 +40,33 @@ public class StageActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         final User ourBoi = (User) i.getSerializableExtra("current_user");
-        Log.d("BOI", ourBoi.getmRawPassword());
+        Log.d("BOI", "THIS = " + ourBoi.subjectList.size());
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
-//      recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(srAdapter);
 
         registrationNumberTextView = (TextView) findViewById(R.id.regNo);
-        registrationNumberTextView.setText(ourBoi.getmRegistrationNumber());
+        registrationNumberTextView.setText("Hi, " + ourBoi.getmRegistrationNumber());
 
         logoutButton = (Button) findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("BOI", "THAT = " + ourBoi.subjectList.size());
                 SharedPreferences sharedPref = StageActivity.this.getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor spEditor = sharedPref.edit();
                 spEditor.remove("tentative_username");
                 spEditor.remove("tentative_password");
-                ourBoi.subjectList.clear();
-                srAdapter.notifyDataSetChanged();
+//                int size = ourBoi.subjectList.size();
+//                ourBoi.subjectList.clear();
+//                srAdapter.notifyItemRangeRemoved(0, size);
+//                srAdapter.notifyDataSetChanged();
                 StageActivity.this.finish();
             }
         });
 
-    }
-
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view); // item position
-            int column = position % spanCount; // item column
-
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
-
-                if (position < spanCount) { // top edge
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing; // item bottom
-            } else {
-                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
-                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-                if (position >= spanCount) {
-                    outRect.top = spacing; // item top
-                }
-            }
-        }
-    }
-
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 }
