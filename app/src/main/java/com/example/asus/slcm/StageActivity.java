@@ -1,7 +1,9 @@
 package com.example.asus.slcm;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,63 +30,45 @@ public class StageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SubjectRecyclerAdapter srAdapter;
     private List<Subject> subjectList;
+    private TextView registrationNumberTextView;
+    private Button logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stage);
 
+        // Receive User from LoginActivity
         Intent i = getIntent();
-        User ourBoi = (User) i.getSerializableExtra("current_user");
-        Log.d("BOI", ourBoi.getmRawPassword());
-        ourBoi.printUserInfoToConsole();
-            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-            srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
-            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-            recyclerView.setLayoutManager(mLayoutManager);
-//            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(srAdapter);
-            srAdapter.notifyDataSetChanged();
-    }
+        final User ourBoi = (User) i.getSerializableExtra("current_user");
 
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+        // Load into Recycler View
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(srAdapter);
 
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view); // item position
-            int column = position % spanCount; // item column
-
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
-
-                if (position < spanCount) { // top edge
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing; // item bottom
-            } else {
-                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
-                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-                if (position >= spanCount) {
-                    outRect.top = spacing; // item top
-                }
+        registrationNumberTextView = (TextView) findViewById(R.id.regNo);
+        registrationNumberTextView.setText("Hi, " + ourBoi.getmRegistrationNumber());
+        logoutButton = (Button) findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //remove saved login data, and go to LoginActivity screen
+                SharedPreferences sharedPref = StageActivity.this.getSharedPreferences(getString(R.string.sharedPreferenceLabel), Context.MODE_PRIVATE);
+                SharedPreferences.Editor spEditor = sharedPref.edit();
+                spEditor.clear();
+                spEditor.apply();
+                StageActivity.this.finish();
             }
-        }
+        });
+
     }
 
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    @Override
+    protected void onResume() {
+        super.onResume();
+        srAdapter.notifyDataSetChanged();
     }
 }

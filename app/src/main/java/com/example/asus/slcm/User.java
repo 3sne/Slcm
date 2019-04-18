@@ -1,6 +1,7 @@
 package com.example.asus.slcm;
 
 import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -62,6 +63,6 @@ public class User implements Serializable {
     }
 
     public boolean getAreSubjectsLoaded() {
-        return  areSubjectsLoaded;
+        return areSubjectsLoaded;
     }
 }
