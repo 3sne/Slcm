@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText userName,password;
+    EditText userName, password;
     Button loginButton;
     private RequestQueue mQueue;
     private String mUsername;
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         userName = findViewById(R.id.userName);
         password = findViewById(R.id.password);
-        loginButton=findViewById(R.id.loginButton);
+        loginButton = findViewById(R.id.loginButton);
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         cv = (CardView) findViewById(R.id.card_view_login);
         appTitle = (TextView) findViewById(R.id.app_title);
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
             if (isNetworkAvailable()) {
                 jsonParse();
             } else {
-                Log.i("offline", "Not connect to internet");
+                Log.i("offline", "Not connected to the Internet :(");
                 Toast.makeText(LoginActivity.this, "Check your internet connection :)", Toast.LENGTH_LONG).show();
             }
         }
@@ -85,28 +85,27 @@ public class LoginActivity extends AppCompatActivity {
                 userName.clearFocus();
                 password.clearFocus();
                 loginButton.requestFocus();
-                 String user=userName.getText().toString().trim();
-                 String pass=password.getText().toString().trim();
-                 if (!(TextUtils.isEmpty(user)) && !(TextUtils.isEmpty(pass))) {
-                     if (verifyUserName(user)) {
-                         Log.i("verify", "SUCCC");
-                         mUsername = user;
-                         mPassword = pass;
-                         ourBoi.setmRegistrationNumber(mUsername);
-                         ourBoi.setmRawPassword(mPassword);
-                         if (isNetworkAvailable()) {
-                             jsonParse();
-                         } else {
-                             Log.i("offline", "Not connect to internet");
-                             Toast.makeText(LoginActivity.this, "Check your internet connection :)", Toast.LENGTH_LONG).show();
-                         }
-                     } else {
-                         Log.i("verify", "UN ____  SUCCC");
-                         Toast.makeText(LoginActivity.this, "Invalid Registration Number", Toast.LENGTH_LONG).show();
-                     }
-                 } else {
-                     Toast.makeText(LoginActivity.this, "Please enter username or password", Toast.LENGTH_LONG).show();
-                 }
+                String user = userName.getText().toString().trim();
+                String pass = password.getText().toString().trim();
+                if (!(TextUtils.isEmpty(user)) && !(TextUtils.isEmpty(pass))) {
+                    if (verifyUserName(user)) {
+                        mUsername = user;
+                        mPassword = pass;
+                        ourBoi.setmRegistrationNumber(mUsername);
+                        ourBoi.setmRawPassword(mPassword);
+                        if (isNetworkAvailable()) {
+                            jsonParse();
+                        } else {
+                            Log.i("offline", "Not connect to internet");
+                            Toast.makeText(LoginActivity.this, "Check your internet connection :)", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Log.i("verify", "UN ____  SUCCC");
+                        Toast.makeText(LoginActivity.this, "Invalid Registration Number", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Please enter username or password", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -141,29 +140,29 @@ public class LoginActivity extends AppCompatActivity {
                                         ourBoi.addSubject(sub);
                                     }
                                     if (ourBoi.getAreSubjectsLoaded()) {
-                                        SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(getString(R.string.sharedPreferenceLabel), Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPref.edit();
-                                        editor.putString(getString(R.string.sharedPreferenceUsername), userName.getText().toString().trim());
-                                        editor.putString(getString(R.string.sharedPreferencePassword), password.getText().toString().trim());
-                                        editor.apply();
+                                        storeKey();
                                         Intent i = new Intent(mContext, StageActivity.class);
                                         i.putExtra("current_user", ourBoi);
                                         startActivity(i);
                                     }
                                 } else {
                                     progressBarEnd();
-                                    Toast.makeText(LoginActivity.this,"Incorrect Credentials :(\nCODE: ", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, "Incorrect Credentials :(\nCODE: ", Toast.LENGTH_LONG).show();
+                                    deleteKey();
                                 }
                             } else {
                                 //erroneous login
                                 progressBarEnd();
-                                Toast.makeText(LoginActivity.this,"ERROR :(\nCODE: " + response.getString("code"),Toast.LENGTH_LONG).show();
+                                Toast.makeText(LoginActivity.this, "ERROR :(\nCODE: " + response.getString("code"), Toast.LENGTH_LONG).show();
+                                deleteKey();
                             }
 
                         } catch (JSONException e) {
                             Log.e("JSON ERROR", e.toString());
-                            Toast.makeText(LoginActivity.this,"Timed Out, please try again ^.^",Toast.LENGTH_LONG).show();
+                            Log.i("eres", response.toString());
+                            Toast.makeText(LoginActivity.this, "Timed Out, please try again ^.^", Toast.LENGTH_LONG).show();
                             e.printStackTrace();
+                            deleteKey();
                         }
                     }
 
@@ -171,6 +170,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("SOMEERROR", "Well this is a bust." + error.toString());
+                Toast.makeText(LoginActivity.this, "Server Error, try again after some time.", Toast.LENGTH_LONG).show();
+                deleteKey();
+                progressBarEnd();
                 error.printStackTrace();
             }
         });
@@ -196,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
     public void hideKeyboard(Activity activity) {
         View view = activity.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
@@ -207,6 +209,22 @@ public class LoginActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    private void storeKey() {
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.sharedPreferenceLabel), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.sharedPreferenceUsername), mUsername);
+        editor.putString(getString(R.string.sharedPreferencePassword), mPassword);
+        editor.apply();
+    }
+
+    private void deleteKey() {
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.sharedPreferenceLabel), Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sharedPref.edit();
+        spEditor.clear();
+        spEditor.apply();
+    }
+
 
     @Override
     protected void onRestart() {

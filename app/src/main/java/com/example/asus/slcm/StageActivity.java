@@ -56,10 +56,9 @@ public class StageActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //remove saved login data, and go to LoginActivity screen
-                SharedPreferences sharedPref = StageActivity.this.getSharedPreferences(getString(R.string.sharedPreferenceLabel) , Context.MODE_PRIVATE);
+                SharedPreferences sharedPref = StageActivity.this.getSharedPreferences(getString(R.string.sharedPreferenceLabel), Context.MODE_PRIVATE);
                 SharedPreferences.Editor spEditor = sharedPref.edit();
-                spEditor.remove(getString(R.string.sharedPreferenceUsername));
-                spEditor.remove(getString(R.string.sharedPreferencePassword));
+                spEditor.clear();
                 spEditor.apply();
                 StageActivity.this.finish();
             }
