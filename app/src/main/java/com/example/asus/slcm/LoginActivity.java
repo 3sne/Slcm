@@ -53,20 +53,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        userName=findViewById(R.id.userName);    //get the username and password
-        password=findViewById(R.id.password);
-        loginButton=findViewById(R.id.loginButton);
-        mQueue = Volley.newRequestQueue(this);
         mContext = getApplicationContext();
+        userName = findViewById(R.id.userName);
+        password = findViewById(R.id.password);
+        loginButton=findViewById(R.id.loginButton);
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         cv = (CardView) findViewById(R.id.card_view_login);
         appTitle = (TextView) findViewById(R.id.app_title);
+        mQueue = Volley.newRequestQueue(this);
 
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        String un = sharedPref.getString("tentative_username", "bobo");
-        String ps = sharedPref.getString("tentative_password", "vogo");
-
-        if (!un.equals("bobo") || !ps.equals("vogo")) {
+        // Attempt data-fetch directly if credentials are already saved
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.sharedPreferenceLabel), Context.MODE_PRIVATE);
+        String un = sharedPref.getString(getString(R.string.sharedPreferenceUsername), "empty");
+        String ps = sharedPref.getString(getString(R.string.sharedPreferencePassword), "empty");
+        if (!un.equals("empty") && !ps.equals("empty")) {
             mUsername = un;
             mPassword = ps;
             ourBoi.setmRegistrationNumber(mUsername);
@@ -141,10 +141,10 @@ public class LoginActivity extends AppCompatActivity {
                                         ourBoi.addSubject(sub);
                                     }
                                     if (ourBoi.getAreSubjectsLoaded()) {
-                                        SharedPreferences sharedPref = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
+                                        SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(getString(R.string.sharedPreferenceLabel), Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedPref.edit();
-                                        editor.putString("tentative_username", userName.getText().toString().trim());
-                                        editor.putString("tentative_password", password.getText().toString().trim());
+                                        editor.putString(getString(R.string.sharedPreferenceUsername), userName.getText().toString().trim());
+                                        editor.putString(getString(R.string.sharedPreferencePassword), password.getText().toString().trim());
                                         editor.apply();
                                         Intent i = new Intent(mContext, StageActivity.class);
                                         i.putExtra("current_user", ourBoi);
@@ -219,5 +219,4 @@ public class LoginActivity extends AppCompatActivity {
         super.onStop();
         progressBarEnd();
     }
-
 }

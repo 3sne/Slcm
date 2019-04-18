@@ -38,9 +38,11 @@ public class StageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stage);
 
+        // Receive User from LoginActivity
         Intent i = getIntent();
         final User ourBoi = (User) i.getSerializableExtra("current_user");
-        Log.d("BOI", "THIS = " + ourBoi.subjectList.size());
+
+        // Load into Recycler View
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         srAdapter = new SubjectRecyclerAdapter(this, (List<Subject>) ourBoi.subjectList);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
@@ -50,23 +52,24 @@ public class StageActivity extends AppCompatActivity {
 
         registrationNumberTextView = (TextView) findViewById(R.id.regNo);
         registrationNumberTextView.setText("Hi, " + ourBoi.getmRegistrationNumber());
-
         logoutButton = (Button) findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Log.d("BOI", "THAT = " + ourBoi.subjectList.size());
-                SharedPreferences sharedPref = StageActivity.this.getPreferences(Context.MODE_PRIVATE);
+            public void onClick(View v) { //remove saved login data, and go to LoginActivity screen
+                SharedPreferences sharedPref = StageActivity.this.getSharedPreferences(getString(R.string.sharedPreferenceLabel) , Context.MODE_PRIVATE);
                 SharedPreferences.Editor spEditor = sharedPref.edit();
-                spEditor.remove("tentative_username");
-                spEditor.remove("tentative_password");
-//                int size = ourBoi.subjectList.size();
-//                ourBoi.subjectList.clear();
-//                srAdapter.notifyItemRangeRemoved(0, size);
-//                srAdapter.notifyDataSetChanged();
+                spEditor.remove(getString(R.string.sharedPreferenceUsername));
+                spEditor.remove(getString(R.string.sharedPreferencePassword));
+                spEditor.apply();
                 StageActivity.this.finish();
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        srAdapter.notifyDataSetChanged();
     }
 }
